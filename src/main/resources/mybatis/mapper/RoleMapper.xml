@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootdemo.mapper.RoleMapper">
+
+    <select id="getById" resultType="com.example.springbootdemo.entity.Role">
+      select * from role where id = #{id}
+    </select>
+
+    <select id="getAll"  resultType="com.example.springbootdemo.entity.Role">
+      select * from role;
+    </select>
+
+    <insert id="add">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into role(id,name) values(#{id}, #{name})
+    </insert>
+</mapper>

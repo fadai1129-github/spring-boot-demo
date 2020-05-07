@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springbootdemo.mapper.UserMapper">
+
+    <resultMap id="user" type="com.example.springbootdemo.entity.User">
+        <result property="id" column="id" />
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+        <result property="age" column="age"/>
+        <association property="role" javaType="com.example.springbootdemo.entity.Role">
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
+        </association>
+    </resultMap>
+
+    <select id="getById" resultMap="user">
+      select *,role.name as role_name from user inner join role on user.role_id=role.id where user.id = #{id}
+    </select>
+
+    <select id="getAll"  resultMap="user">
+      select *,role.name as role_name from user inner join role on user.role_id=role.id;
+    </select>
+
+    <insert id="add" >
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into user(id,name,password,age,role_id) values(#{id}, #{name},#{password},#{age},#{role.id})
+    </insert>
+</mapper>
